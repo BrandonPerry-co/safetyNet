@@ -15,7 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class Firestation {
 
-    private Set<String> addresses;
-    private Set<String> firestationNum;
+    private String address;
+    private String station;
 
 }

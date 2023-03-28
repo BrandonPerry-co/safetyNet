@@ -1,9 +1,16 @@
 package name.brandonperry.safetynet.models;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+
+import static name.brandonperry.safetynet.DataFile.getPeople;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.ARRAY;
 
 public class PersonTest {
     @Test

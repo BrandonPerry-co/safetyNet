@@ -15,16 +15,8 @@ import java.util.List;
 public class DataFile {
     private static List<Person> people = new ArrayList<>();
     private static List<Firestation> stations = new ArrayList<>();
-    private static List<MedicalRecord> medicalRecords = new ArrayList<>();
+    static List<MedicalRecord> medicalRecords = new ArrayList<>();
     public static void load() throws IOException {
-//        String filePath = "src/main/resources/data.json";
-//        String data = new String(Files.readAllBytes(Paths.get(filePath)));
-//
-//        JSONArray jsonArray = new JSONArray(data);
-//        for(int i = 0; i < jsonArray.length(); i++){
-//            JSONObject object = jsonArray.getJSONObject(i);
-//        }
-
         var filePath = "src/main/resources/data.json";
         var bytesFile = Files.readAllBytes(new File(filePath).toPath());
         var iter = JsonIterator.parse(bytesFile);
@@ -45,12 +37,22 @@ public class DataFile {
                         .build() //
         ));
 
-//        stationAny.forEach(p -> stations.add( //
-//                Firestation.builder() //
-//                        .address(p.get("address").toString()) //
-//                        .station(p.get("station").toString()) //
-//                        .build() //
-//        ));
+        stationAny.forEach(p -> stations.add( //
+                Firestation.builder() //
+                        .address(p.get("address").toString()) //
+                        .station(p.get("station").toString()) //
+                        .build() //
+        ));
+
+        medicalRecordsAny.forEach(p -> medicalRecords.add( //
+                MedicalRecord.builder() //
+                        .firstName(p.get("firstName").toString()) //
+                        .lastName(p.get("lastName").toString()) //
+                        .birthdate(p.get("birthdate").toString()) //
+                        .medications(p.get("medications").toString()) //
+                        .allergies(p.get("allergies").toString()) //
+                        .build() //
+        ));
     }
 
     public static List<Person> getPeople() {
@@ -58,5 +60,9 @@ public class DataFile {
     }
     public static List<Firestation> getStation() {
         return stations;
+    }
+
+    public static List<MedicalRecord> getRecords() {
+        return medicalRecords;
     }
 }

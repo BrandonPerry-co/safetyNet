@@ -16,6 +16,15 @@ public class DataFile {
     private static List<Person> people = new ArrayList<>();
     private static List<Firestation> stations = new ArrayList<>();
     static List<MedicalRecord> medicalRecords = new ArrayList<>();
+
+    static {
+        try {
+            load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void load() throws IOException {
         var filePath = "src/main/resources/data.json";
         var bytesFile = Files.readAllBytes(new File(filePath).toPath());
@@ -58,6 +67,7 @@ public class DataFile {
     public static List<Person> getPeople() {
         return people;
     }
+
     public static List<Firestation> getStation() {
         return stations;
     }

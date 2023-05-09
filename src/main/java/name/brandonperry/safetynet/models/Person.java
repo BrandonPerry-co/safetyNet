@@ -17,5 +17,9 @@ public class Person {
     private String phone;
     private String email;
 
+    public static void addPerson(Person person) {
+
+    }
+
     //FIXME
 }

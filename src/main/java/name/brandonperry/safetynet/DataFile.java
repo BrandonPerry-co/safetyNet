@@ -15,7 +15,7 @@ import java.util.List;
 public class DataFile {
     private static List<Person> people = new ArrayList<>();
     private static List<Firestation> stations = new ArrayList<>();
-    static List<MedicalRecord> medicalRecords = new ArrayList<>();
+    private static List<MedicalRecord> medicalRecords = new ArrayList<>();
 
     static {
         try {

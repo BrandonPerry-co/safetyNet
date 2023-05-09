@@ -49,4 +49,10 @@ public class PersonTest {
         Person person = Person.builder().firstName("Brandon").build();
         assertThat(person.getFirstName()).isEqualTo("Brandon");
     }
+
+    @Test
+    public void testAddPerson() {
+        Person person = Person.builder().firstName("Brandon").build();
+        assertThat(person.getFirstName()).isEqualTo("Brandon");
+    }
 }

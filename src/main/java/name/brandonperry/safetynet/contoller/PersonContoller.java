@@ -8,35 +8,54 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
-
+/**
+ * Handle person request
+ */
 @RestController
 public class PersonContoller {
 
     Logger logger = LoggerFactory.getLogger(PersonContoller.class);
 
+    /**
+     * Get all people
+     *
+     * @return people found
+     */
     @GetMapping("/person")
     public List<Person> getPeople() {
         logger.error("Error please check controller");
         return DataFile.getPeople();
     }
 
-    @PostMapping(value = "/person")
+    @PostMapping("/person")
     public Person addPerson(@RequestBody Person person) {
         List<Person> people = DataFile.getPeople();
         people.add(person);
         return people.get(people.size() - 1);
     }
 
-    @PutMapping(value = "/person")
-    public Person updatePerson(@RequestBody Person person) {
-        List<Person> people = DataFile.getPeople();
-        return people.stream()
-                .filter(p -> "John".equals(p.getFirstName()) && "Boyd".equals(p.getLastName()))
-                .findAny()
-                .orElse(null);
+    @PutMapping("/person/{id}")
+    public Person updatePerson(@PathVariable("id") String id, @RequestBody Person person) {
+        Person foundPerson = DataFile.updatePerson(id, person);
+        return foundPerson;
     }
+
+    @DeleteMapping("/person/{id}")
+    public Person deletePerson(@PathVariable("id") String id) {
+        Person removedPerson = DataFile.deletePerson(id);
+        return removedPerson;
+    }
+
+//    @DeleteMapping(path = "/person{id}")
+//    public Person deletePerson(@PathVariable("id") String id) {
+//      person.remove(id);
+//
+//      return Person.noContent().build();
+//    }
 
 
 //    http://localhost:8080/person

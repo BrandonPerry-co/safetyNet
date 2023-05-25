@@ -106,4 +106,10 @@ public class DataFile {
 
         return removedPerson;
     }
+
+    public static Firestation updateStation(String id, Firestation firestation) {
+    }
+
+    public static Firestation deleteStation(String id) {
+    }
 }

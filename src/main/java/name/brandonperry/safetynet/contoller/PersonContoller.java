@@ -50,13 +50,6 @@ public class PersonContoller {
         return removedPerson;
     }
 
-//    @DeleteMapping(path = "/person{id}")
-//    public Person deletePerson(@PathVariable("id") String id) {
-//      person.remove(id);
-//
-//      return Person.noContent().build();
-//    }
-
 
 //    http://localhost:8080/person
 //    This endpoint will provide the following via Http Post/Put/Delete:

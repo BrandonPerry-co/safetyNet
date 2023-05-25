@@ -1,13 +1,10 @@
 package name.brandonperry.safetynet.models;
-
 import lombok.*;
+//import lombok.AllArgsConstructor;
+//import lombok.Builder;
+//import lombok.Data;
+//import lombok.NoArgsConstructor;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.Set;
 //@Getter
 @Data
 @Builder
@@ -19,11 +16,10 @@ public class Firestation {
     private String station;
 
     public String getAddresses() {
-
         return null;
     }
 
-    public String getStationNum() {
+    public String getStation() {
         return null;
     }
 }

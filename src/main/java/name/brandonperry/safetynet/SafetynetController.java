@@ -6,14 +6,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SafetynetController {
     //    public class Firestation {
-    @GetMapping("/firestation")
-    public String getFirestation() {
-        return "This URL should return a list of people serviced by the corresponding fire station. So if station number = 1," +
-                "it should return the people serviced by station number 1. The list of people should include these specific" +
-                "pieces of information: first name, last name, address, phone number. As well, it should provide a" +
-                "summary of the number of adults in the service area and the number of children (anyone aged 18 or" +
-                "younger).";
-    }
+//    @GetMapping("/firestation")
+//    public String getFirestation() {
+//        return "This URL should return a list of people serviced by the corresponding fire station. So if station number = 1," +
+//                "it should return the people serviced by station number 1. The list of people should include these specific" +
+//                "pieces of information: first name, last name, address, phone number. As well, it should provide a" +
+//                "summary of the number of adults in the service area and the number of children (anyone aged 18 or" +
+//                "younger).";
+//    }
 
     @GetMapping("/phoneAlert")
     public String getPhoneAlert() {

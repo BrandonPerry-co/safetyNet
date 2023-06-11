@@ -10,10 +10,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class FirestationTest {
     @Test
     public void testAddresses() {
-        Firestation newAddress = new Firestation();
-        newAddress.setAddress("1222 N forest hills Dr.");
-        assertThat(newAddress.getAddresses()).isEqualTo("1222 N forest hills Dr.");
-        System.out.println(newAddress);
+        Firestation newFireStation = new Firestation();
+        newFireStation.setAddress("1222 N forest hills Dr.");
+        assertThat(newFireStation.getAddress()).isEqualTo("1222 N forest hills Dr.");
+        System.out.println(newFireStation);
     }
 
     @Test

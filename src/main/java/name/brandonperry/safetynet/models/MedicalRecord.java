@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -16,6 +17,6 @@ public class MedicalRecord {
     private String firstName;
     private String lastName;
     private String birthdate;
-    private String medications;
-    private String allergies;
+    private List<String> medications;
+    private List<String> allergies;
 }

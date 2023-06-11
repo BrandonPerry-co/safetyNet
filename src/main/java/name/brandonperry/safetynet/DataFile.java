@@ -1,12 +1,15 @@
 package name.brandonperry.safetynet;
 
 import com.jsoniter.JsonIterator;
-import name.brandonperry.safetynet.contoller.PersonContoller;
+import com.jsoniter.any.Any;
+import name.brandonperry.safetynet.contoller.PersonController;
 import name.brandonperry.safetynet.models.Firestation;
 import name.brandonperry.safetynet.models.MedicalRecord;
 import name.brandonperry.safetynet.models.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,14 +17,16 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class DataFile {
 
     private static Logger logger = LoggerFactory.getLogger(DataFile.class);
-    private static List<Person> people = new ArrayList<>();
-    private static List<Firestation> stations = new ArrayList<>();
-    private static List<MedicalRecord> medicalRecords = new ArrayList<>();
+    private List<Person> people = new ArrayList<>();
+    private List<Firestation> stations = new ArrayList<>();
+    private List<MedicalRecord> medicalRecords = new ArrayList<>();
 
-    static {
+    @Autowired
+    public DataFile() {
         try {
             load();
         } catch (IOException e) {
@@ -29,7 +34,7 @@ public class DataFile {
         }
     }
 
-    public static void load() throws IOException {
+    public void load() throws IOException {
         var filePath = "src/main/resources/data.json";
         var bytesFile = Files.readAllBytes(new File(filePath).toPath());
         var iter = JsonIterator.parse(bytesFile);
@@ -62,25 +67,39 @@ public class DataFile {
                         .firstName(p.get("firstName").toString()) //
                         .lastName(p.get("lastName").toString()) //
                         .birthdate(p.get("birthdate").toString()) //
-                        .medications(p.get("medications").toString()) //
-                        .allergies(p.get("allergies").toString()) //
+                        .medications(getMedicalRecordItems(p, "medications")) //
+                        .allergies(getAllergyItems(p, "allergies")) //
                         .build() //
         ));
     }
 
-    public static List<Person> getPeople() {
+    private List<String> getMedicalRecordItems(Any medicalRecordAny, String key) {
+        var items = new ArrayList<String>();
+
+        medicalRecordAny.get(key).forEach(itemAny -> items.add(itemAny.toString()));
+        return items;
+    }
+
+    private List<String> getAllergyItems(Any allergyAny, String key) {
+        var items = new ArrayList<String>();
+
+        allergyAny.get(key).forEach(itemAny -> items.add(itemAny.toString()));
+        return items;
+    }
+
+    public List<Person> getPeople() {
         return people;
     }
 
-    public static List<Firestation> getStation() {
+    public List<Firestation> getStation() {
         return stations;
     }
 
-    public static List<MedicalRecord> getRecords() {
+    public List<MedicalRecord> getRecords() {
         return medicalRecords;
     }
 
-    public static Person updatePerson(String id, Person person) {
+    public Person updatePerson(String id, Person person) {
         String[] names = id.split("\\+");
         Person foundPerson = people.stream()
                 .filter(p -> names[0].equals(p.getFirstName()) && names[1].equals(p.getLastName()))
@@ -95,7 +114,7 @@ public class DataFile {
         return foundPerson;
     }
 
-    public static Person deletePerson(String id) {
+    public Person deletePerson(String id) {
         logger.debug("Deleting person!");
         String[] names = id.split("\\+");
         Person removedPerson = people.stream()
@@ -107,9 +126,58 @@ public class DataFile {
         return removedPerson;
     }
 
-    public static Firestation updateStation(String id, Firestation firestation) {
+    public Firestation updateStation(String id, Firestation firestation) {
+        logger.debug("Updating station!");
+        String[] station = id.split("\\+");
+        Firestation foundStation = stations.stream()
+                .filter(p -> station[0].equals(p.getAddress()) && station[1].equals(p.getStation()))
+                .findFirst()
+                .orElse(null);
+
+        foundStation.setAddress(firestation.getAddress());
+        foundStation.setStation(firestation.getStation());
+
+        return foundStation;
     }
 
-    public static Firestation deleteStation(String id) {
+    public Firestation deleteStation(String id) {
+        logger.debug("Deleting station!");
+        String[] names = id.split("\\+");
+        Firestation removedStation = stations.stream()
+                .filter(p -> names[0].equals(p.getAddress()) && names[1].equals(p.getStation()))
+                .findFirst()
+                .orElse(null);
+
+        stations.remove(removedStation);
+
+        return removedStation;
+    }
+
+    public MedicalRecord updateMedicalRecord(String id, MedicalRecord medicalRecord) {
+        logger.debug("Updating medical record!");
+        String[] names = id.split("\\+");
+        MedicalRecord foundMedicalRecord = medicalRecords.stream()
+                .filter(p -> names[0].equals(p.getFirstName()) && names[1].equals(p.getLastName()))
+                .findFirst()
+                .orElse(null);
+
+        foundMedicalRecord.setBirthdate(medicalRecord.getBirthdate());
+        foundMedicalRecord.setMedications(medicalRecord.getMedications());
+        foundMedicalRecord.setAllergies(medicalRecord.getAllergies());
+
+        return foundMedicalRecord;
+    }
+
+    public MedicalRecord deleteMedicalRecord(String id) {
+        logger.debug("Deleting medical record!!");
+        String[] names = id.split("\\+");
+        MedicalRecord removedMedicalRecord = medicalRecords.stream()
+                .filter(p -> names[0].equals(p.getFirstName()) && names[1].equals(p.getLastName()))
+                .findFirst()
+                .orElse(null);
+
+        medicalRecords.remove(removedMedicalRecord);
+
+        return removedMedicalRecord;
     }
 }

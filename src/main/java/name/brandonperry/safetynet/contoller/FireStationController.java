@@ -17,8 +17,9 @@ public class FireStationController {
 
     @Autowired
     public FireStationController(DataFile dataFile) {
-        this.dataFile= dataFile;
+        this.dataFile = dataFile;
     }
+
     /**
      * Get all stations
      *
@@ -26,8 +27,9 @@ public class FireStationController {
      */
     @GetMapping("/firestation")
     public List<Firestation> getStation() {
-        logger.error("Error please check controller");
-        return dataFile.getStation();
+        List<Firestation> fireStations = dataFile.getStation();
+        logger.info("Successfully returned all FireStations.");
+        return fireStations;
     }
 
     @PostMapping("/firestation")

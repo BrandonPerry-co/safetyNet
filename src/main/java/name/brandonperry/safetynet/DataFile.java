@@ -2,7 +2,6 @@ package name.brandonperry.safetynet;
 
 import com.jsoniter.JsonIterator;
 import com.jsoniter.any.Any;
-import name.brandonperry.safetynet.contoller.PersonController;
 import name.brandonperry.safetynet.models.Firestation;
 import name.brandonperry.safetynet.models.MedicalRecord;
 import name.brandonperry.safetynet.models.Person;

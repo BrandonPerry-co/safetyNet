@@ -1,4 +1,4 @@
-package name.brandonperry.safetynet;
+package name.brandonperry.safetynet.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

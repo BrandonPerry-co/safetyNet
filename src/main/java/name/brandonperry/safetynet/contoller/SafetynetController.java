@@ -1,4 +1,4 @@
-package name.brandonperry.safetynet;
+package name.brandonperry.safetynet.contoller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

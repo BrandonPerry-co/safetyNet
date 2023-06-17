@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import name.brandonperry.safetynet.DataFile;
 import name.brandonperry.safetynet.contoller.MedicalRecordController;
 import name.brandonperry.safetynet.models.MedicalRecord;
-import name.brandonperry.safetynet.models.Person;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

@@ -7,8 +7,8 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Generated
 public class Person {
-    //TODO firstname, lastname, birthdate, see data.json
     private String firstName;
     private String lastName;
     private String address;

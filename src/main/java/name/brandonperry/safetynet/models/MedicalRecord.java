@@ -1,17 +1,14 @@
 package name.brandonperry.safetynet.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
-import java.util.Set;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Generated
 public class MedicalRecord {
 
     private String firstName;

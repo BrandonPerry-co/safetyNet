@@ -1,10 +1,22 @@
 package name.brandonperry.safetynet.contoller;
 
+import name.brandonperry.safetynet.DataFile;
+import name.brandonperry.safetynet.models.Person;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
+@Import(Person.class)
 public class SafetynetController {
+    @Autowired
+    private DataFile dataFile;
+    private Person person;
+
     //    public class Firestation {
 //    @GetMapping("/firestation")
 //    public String getFirestation() {
@@ -15,22 +27,6 @@ public class SafetynetController {
 //                "younger).";
 //    }
 
-    @GetMapping("/phoneAlert")
-    public String getPhoneAlert() {
-        return "This URL should return a list of phone numbers of each person within the fire station’s jurisdiction.We’ll" +
-                "use this to send emergency text messages to specific households.";
-    }
-
-//    }
-
-    //    @RestController
-//    public class ChildAlert {
-    @GetMapping("/childAlert")
-    public String getChildAlert() {
-        return "This URL should return a list of children (anyone under the age of 18) at that address. The list should" +
-                "include the first and last name of each child, the child’s age, and a list of other persons living at that" +
-                "address. If there are no children at the address, then this URL can return an empty string.";
-    }
 //    }
 
     //    @RestController
@@ -53,21 +49,28 @@ public class SafetynetController {
     }
 //    }
 
-    //    @RestController
-//    public class PersonInfo {
-    @GetMapping("/personInfo")
-    public String getPersonInfo() {
-        return "This should return the person’s name, address, age, email, list of medications with dosages and allergies.\n" +
-                "If there is more than one person with the same name, this URL should return all of them.";
-    }
-//    }
 
-    //    @RestController
-//    public class Community {
     @GetMapping("/communityEmail")
-    public String getCommunity() {
-        return "This will return the email addresses of all of the people in the city.";
+    public List<String> getCommunityEmails(@RequestParam("city") String city) {
+        List<String> emails = dataFile.getCommunityEmails(city);
+        return emails;
     }
-//    }
 
-}
+    @GetMapping("/phoneAlert")
+    public List<String> getPhoneAlerts(@RequestParam("fireStation_number") String fireStation_number) {
+        List<String> phoneAlertList = dataFile.getPhoneAlerts(fireStation_number);
+        return phoneAlertList;
+    }
+    @GetMapping("/childAlert")
+        public List<String> childAlerts(@RequestParam("address") String address) {
+            List<String> childAlertList = dataFile.getChildAlerts(address);
+            return childAlertList;
+    }
+
+    @GetMapping("/personInfo")
+    public List<String> getPersonInfo(@RequestParam("fullName") String fullName) {
+        List<String> personalInfo = dataFile.getPersonInfo(fullName);
+        return personalInfo;
+    }
+
+    }

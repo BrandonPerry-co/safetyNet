@@ -50,12 +50,4 @@ public class PersonController {
         return removedPerson;
     }
 
-
-//    http://localhost:8080/person
-//    This endpoint will provide the following via Http Post/Put/Delete:
-//    Add a new person.
-//    Update an existing person (at this time, assume that firstName and lastName do not change, but other
-//fields can be modified).
-//    Delete a person. (Use a combination of firstName and lastName as a unique identifier)
-
 }

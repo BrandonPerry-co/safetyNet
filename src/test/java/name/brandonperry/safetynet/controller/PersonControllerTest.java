@@ -25,13 +25,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class PersonControllerTest {
     @Autowired
     private DataFile dataFile;
-    // TODO: 4/29/2023 Add autoWired Mock MVC
     @Autowired
     private MockMvc mockMvc;
 
     @Test
     public void testGetAllPeople() throws Exception {
-        // TODO: 5/7/2023 Code it here
         this.mockMvc.perform(get("/person")).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$").isArray()).andExpect(jsonPath("$", hasSize(23)));
     }
 
@@ -72,7 +70,10 @@ public class PersonControllerTest {
         List<Person> testPeople = dataFile.getPeople();
         Person testPerson = testPeople.stream().filter(p -> "John".equals(p.getFirstName()) && "Boyd".equals(p.getLastName())).findFirst().orElse(null);
 
-        mockMvc.perform(delete("/person/{id}", "John+Boyd").contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON_VALUE)).andExpect(status().isOk());
+        mockMvc.perform(delete("/person/{id}", "John+Boyd")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk());
 
         // Get the updated list of people
         List<Person> updatedPeople = dataFile.getPeople();

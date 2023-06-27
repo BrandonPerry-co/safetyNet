@@ -1,5 +1,6 @@
 package name.brandonperry.safetynet;
 
+import lombok.extern.slf4j.Slf4j;
 import name.brandonperry.safetynet.models.Person;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {DataFile.class})
+@Slf4j
 public class DataFileTest {
     @Autowired
     private DataFile dataFile;
@@ -62,6 +64,37 @@ public class DataFileTest {
                 .findFirst()
                 .orElse(null);
         assertThat(deleteThisPerson).isNull();
+    }
+
+    @Test
+    public void testCommunityEmail() throws IOException {
+        List<String> getAllEmails = dataFile.getCommunityEmails("Culver");
+        assertThat(getAllEmails).isNotNull();
+        System.out.println(getAllEmails);
+
+    }
+
+    @Test
+    public void testGetPhoneAlerts() throws IOException {
+        List<String> getAllPhoneAlerts = dataFile.getPhoneAlerts("2");
+        assertThat(getAllPhoneAlerts).isNotNull();
+        log.debug(getAllPhoneAlerts.toString());
+    }
+
+    @Test
+    public void testGetChildAlerts() throws IOException {
+        List<String> getAllChildAlerts = dataFile.getChildAlerts("1509 Culver St");
+        assertThat(getAllChildAlerts).isNotNull();
+        System.out.println(getAllChildAlerts);
+        log.debug(getAllChildAlerts.toString());
+    }
+
+    @Test
+    public void testGetPersonInfoTest() throws IOException {
+        List<String> getPersonalInfo = dataFile.getPersonInfo("John"+" "+"Boyd");
+        assertThat(getPersonalInfo).isNotNull();
+        System.out.println(getPersonalInfo);
+        log.debug(getPersonalInfo.toString());
     }
 
 }

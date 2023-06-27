@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import name.brandonperry.safetynet.DataFile;
 import name.brandonperry.safetynet.contoller.FireStationController;
 import name.brandonperry.safetynet.models.Firestation;
-import name.brandonperry.safetynet.models.Person;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -17,7 +16,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -32,7 +30,6 @@ public class FireStationControllerTest {
 
     @Test
     public void testGetAllStations() throws Exception {
-        // TODO: 5/7/2023 Code it here
         this.mockMvc.perform(get("/firestation")).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$").isArray()).andExpect(jsonPath("$", hasSize(13)));
     }
 
@@ -64,24 +61,6 @@ public class FireStationControllerTest {
                 .andExpect(jsonPath("$.station").value("4"));
         System.out.println(testStation);
     }
-//    @Test
-//    public void testUpdatePerson() throws Exception {
-//        List<Person> testPeople = dataFile.getPeople();
-//        Person testPerson = testPeople.stream().filter(p -> "John".equals(p.getFirstName()) && "Boyd".equals(p.getLastName())).findFirst().orElse(null);
-//        testPerson.setCity("Pizza");
-//        testPerson.setPhone("281-330-8004");
-//        String testingUpdatePerson = new ObjectMapper().writeValueAsString(testPerson);
-//        mockMvc.perform(put("/person/{id}", "John+Boyd")
-//                        .contentType(MediaType.APPLICATION_JSON_VALUE).content(testingUpdatePerson)
-//                        .accept(MediaType.APPLICATION_JSON_VALUE)).andExpect(status().isOk())
-//                .andExpect(jsonPath("$.firstName").value("John"))
-//                .andExpect(jsonPath("$.lastName").value("Boyd"))
-//                .andExpect(jsonPath("$.city").value("Pizza"))
-//                .andExpect(jsonPath("$.phone").value("281-330-8004"));
-//        System.out.println(testPerson);
-//    }
-
-
     @Test
     @DirtiesContext
     public void testDeleteFireStationAddressMapping() throws Exception {

@@ -13,8 +13,12 @@ import org.springframework.stereotype.Repository;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class DataFile {
@@ -179,4 +183,85 @@ public class DataFile {
 
         return removedMedicalRecord;
     }
+
+    public List<String> getCommunityEmails(String city) {
+        List<String> list = people.stream()
+                .filter(p -> city.equals(p.getCity()))
+                .map(p -> p.getEmail())
+                .collect(Collectors.toList());
+        return list;
+    }
+
+    public List<String> getPhoneAlerts(String fireStation_number) {
+        List<String> alerts = stations.stream()
+                .filter(p -> fireStation_number.equals(p.getStation()))
+                .map(p -> p.getAddress())
+                .collect(Collectors.toList());
+
+        List<String> phoneAlertList = people.stream()
+                .filter(p -> alerts.stream().anyMatch(a -> a.equals(p.getAddress())))
+                .map(p -> p.getPhone())
+                .collect(Collectors.toList());
+
+        return phoneAlertList;
+    }
+
+    //    public List<String> getChildAlerts(String address) {
+//        List<String> getPeopleByAddress = people.stream()
+//                .filter(p -> address.equals(p.getAddress()))
+//                .map(p -> p.getFirstName() + " " + p.getLastName())
+//                .collect(Collectors.toList());
+//
+//        List<String> childAlertList = medicalRecords.stream()
+//                .filter(p -> getPeopleByAddress.stream().anyMatch(a -> a.equals(p.getFirstName() + " " + p.getLastName())))
+//                .map(p -> p.getBirthdate()+" "+p.getFirstName() + " " + p.getLastName())
+//                .collect(Collectors.toList());
+//
+//        return childAlertList;
+//    }
+    public List<String> getChildAlerts(String address) {
+        List<String> getPeopleByAddress = people.stream()
+                .filter(p -> address.equals(p.getAddress()))
+                .map(p -> p.getFirstName() + " " + p.getLastName())
+                .collect(Collectors.toList());
+
+        List<String> childAlertList = medicalRecords.stream()
+                .filter(p -> getPeopleByAddress.stream().anyMatch(a -> a.equals(p.getFirstName() + " " + p.getLastName())))
+                .map(p -> {
+                    LocalDate birthdate = LocalDate.parse(p.getBirthdate(), DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+                    int age = calculateAge(birthdate);
+                    return age < 18 ? age + " years - " + p.getFirstName() + " " + p.getLastName() : p.getFirstName() + " " + p.getLastName();
+                })
+                .collect(Collectors.toList());
+
+        return childAlertList;
+    }
+
+    private int calculateAge(LocalDate birthdate) {
+        LocalDate now = LocalDate.now();
+        Period period = Period.between(birthdate, now);
+        return period.getYears();
+    }
+
+    public List<String> getPersonInfo(String fullName) {
+        List<String> getPersonalInfo = people.stream()
+                .filter(p -> fullName.equals(p.getFirstName() + " " + p.getLastName()))
+                .map(p -> p.getFirstName() + " " + p.getLastName() + " " + "Email: " + p.getEmail() + " " + "Address: " + p.getAddress())
+                .collect(Collectors.toList());
+
+        List<String> getMedicalInfo = medicalRecords.stream()
+                .filter(p -> fullName.equals(p.getFirstName() + " " + p.getLastName()))
+                .map(p -> {
+                    LocalDate birthdate = LocalDate.parse(p.getBirthdate(), DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+                    int age = calculateAge(birthdate);
+                    return age + " years -" + "Medications: " + p.getMedications() + " " + "Allergies: " + p.getAllergies();
+                })
+                .collect(Collectors.toList());
+
+        List<String> mergedList = new ArrayList<>();
+        mergedList.addAll(getPersonalInfo);
+        mergedList.addAll(getMedicalInfo);
+        return mergedList;
+    }
+
 }

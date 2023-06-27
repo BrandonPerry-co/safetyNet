@@ -14,13 +14,6 @@ class FirestationTest {
     }
 
     @Test
-    public void testFirstName() {
-        Person person = new Person();
-        person.setFirstName("Brandon");
-        assertThat(person.getFirstName()).isEqualTo("Brandon");
-    }
-//    @Disabled("Fix me ")
-    @Test
     public void testStationNum() {
         Firestation station = new Firestation();
         station.setStation("2");

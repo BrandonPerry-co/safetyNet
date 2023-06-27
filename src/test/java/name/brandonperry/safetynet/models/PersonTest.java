@@ -38,6 +38,12 @@ public class PersonTest {
         assertThat(person.getZip()).isEqualTo("88615");
     }
     @Test
+    public void testPhone() {
+        Person person = new Person();
+        person.setPhone("281-330-8004");
+        assertThat(person.getPhone()).isEqualTo("281-330-8004");
+    }
+    @Test
     public void testBuilder() {
         Person person = Person.builder().firstName("Brandon").build();
         assertThat(person.getFirstName()).isEqualTo("Brandon");

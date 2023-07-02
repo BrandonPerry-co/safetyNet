@@ -90,11 +90,34 @@ public class DataFileTest {
     }
 
     @Test
-    public void testGetPersonInfoTest() throws IOException {
-        List<String> getPersonalInfo = dataFile.getPersonInfo("John"+" "+"Boyd");
+    public void testGetPersonInfo() throws IOException {
+        List<String> getPersonalInfo = dataFile.getPersonInfo("John" + " " + "Boyd");
         assertThat(getPersonalInfo).isNotNull();
         System.out.println(getPersonalInfo);
         log.debug(getPersonalInfo.toString());
     }
 
+    @Test
+    public void testGetServicingStation() throws IOException {
+        List<String> getServicingStation = dataFile.getServicingStation("1509 Culver St");
+        assertThat(getServicingStation).isNotNull();
+        System.out.println(getServicingStation);
+        log.debug(getServicingStation.toString());
+    }
+
+    @Test
+    public void testGetServicedArea() throws IOException {
+        List<String> getServicingArea = dataFile.getServicedArea("1");
+        assertThat(getServicingArea).isNotNull();
+        System.out.println(getServicingArea);
+        log.debug(getServicingArea.toString());
+    }
+
+    @Test
+    public void testGetEveryoneServicedByStation() throws IOException {
+        List<String> getListOfAllStations = dataFile.getEveryoneServicedByStation("1");
+        assertThat(getListOfAllStations).isNotNull();
+        System.out.println(getListOfAllStations);
+        log.debug(getListOfAllStations.toString());
+    }
 }

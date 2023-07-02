@@ -183,7 +183,7 @@ public class DataFile {
 
         return removedMedicalRecord;
     }
-
+//http://localhost:8080/communityEmail?city=<city>
     public List<String> getCommunityEmails(String city) {
         List<String> list = people.stream()
                 .filter(p -> city.equals(p.getCity()))
@@ -206,19 +206,6 @@ public class DataFile {
         return phoneAlertList;
     }
 
-    //    public List<String> getChildAlerts(String address) {
-//        List<String> getPeopleByAddress = people.stream()
-//                .filter(p -> address.equals(p.getAddress()))
-//                .map(p -> p.getFirstName() + " " + p.getLastName())
-//                .collect(Collectors.toList());
-//
-//        List<String> childAlertList = medicalRecords.stream()
-//                .filter(p -> getPeopleByAddress.stream().anyMatch(a -> a.equals(p.getFirstName() + " " + p.getLastName())))
-//                .map(p -> p.getBirthdate()+" "+p.getFirstName() + " " + p.getLastName())
-//                .collect(Collectors.toList());
-//
-//        return childAlertList;
-//    }
     public List<String> getChildAlerts(String address) {
         List<String> getPeopleByAddress = people.stream()
                 .filter(p -> address.equals(p.getAddress()))
@@ -230,7 +217,7 @@ public class DataFile {
                 .map(p -> {
                     LocalDate birthdate = LocalDate.parse(p.getBirthdate(), DateTimeFormatter.ofPattern("MM/dd/yyyy"));
                     int age = calculateAge(birthdate);
-                    return age < 18 ? age + " years - " + p.getFirstName() + " " + p.getLastName() : p.getFirstName() + " " + p.getLastName();
+                    return age < 18 ? age + " years - " + p.getFirstName() + " " + p.getLastName() : "Adult - "+p.getFirstName() + " " + p.getLastName();
                 })
                 .collect(Collectors.toList());
 
@@ -243,6 +230,7 @@ public class DataFile {
         return period.getYears();
     }
 
+    //http://localhost:8080/personInfo?firstName=<firstName>&lastName=<lastName>
     public List<String> getPersonInfo(String fullName) {
         List<String> getPersonalInfo = people.stream()
                 .filter(p -> fullName.equals(p.getFirstName() + " " + p.getLastName()))
@@ -262,6 +250,68 @@ public class DataFile {
         mergedList.addAll(getPersonalInfo);
         mergedList.addAll(getMedicalInfo);
         return mergedList;
+    }
+
+    public List<String> getServicingStation(String address) {
+        List<String> peopleByAddress = people.stream()
+                .filter(p -> address.equals(p.getAddress()))
+                .map(p -> p.getFirstName() + " " + p.getLastName())
+                .collect(Collectors.toList());
+
+        List<String> getMedicalInfo = medicalRecords.stream()
+                .filter(p -> peopleByAddress.stream().anyMatch(a -> a.equals(p.getFirstName() + " " + p.getLastName())))
+                .map(p -> "Name: "+p.getFirstName() + " " + p.getLastName() + " " +"DOB: "+ p.getBirthdate() + " " +"Medications: "+ p.getMedications() + " " +"Allergies: "+ p.getAllergies())
+                .collect(Collectors.toList());
+/**
+ * Add phoneNumber that's the only thing missing
+ */
+        return getMedicalInfo;
+    }
+
+//    //http://localhost:8080/firestation?stationNumber=<station_number>
+    public List<String> getServicedArea(String stationNumber) {
+        List<String> area = stations.stream()
+                .filter(p -> stationNumber.equals(p.getStation()))
+                .map(p -> p.getAddress())
+                .collect(Collectors.toList());
+
+        List<String> residents = people.stream()
+                .filter(p -> area.stream().anyMatch(a -> a.equals(p.getAddress())))
+                .map(p -> "Name: " + p.getFirstName() + " " + p.getLastName() + " " + "Address: " + p.getAddress() + " " + "Phone: " + p.getPhone())
+                .collect(Collectors.toList());
+/**
+ * Add Adult and child count
+ */
+        List<String> numberOfAdults = medicalRecords.stream()
+                .filter(p -> area.stream().anyMatch(a -> a.equals(p.getFirstName())))
+//                .map(p -> p.getBirthdate())
+                .map(p -> {
+                    LocalDate birthdate = LocalDate.parse(p.getBirthdate(), DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+                    int age = calculateAge(birthdate);
+                    if (age < 18) return age + " Adults";
+                    return null;
+                })
+                .collect(Collectors.toList());
+
+        return residents;
+    }
+
+
+ //http://localhost:8080/flood/stations?stations=<a list of station_numbers>
+    public List<String> getEveryoneServicedByStation(String stationNumber) {
+        List<String> addresses = stations.stream()
+                .filter(p -> stationNumber.equals(p.getStation()))
+                .map(p -> p.getAddress())
+                .collect(Collectors.toList());
+
+        List<String> residents = people.stream()
+                .filter(p -> addresses.stream().anyMatch(a -> a.equals(p.getAddress())))
+                .map(p -> "Address: " + p.getAddress() + " " + "Name: " + p.getFirstName() + " " + p.getLastName() + " " + "Phone: " + p.getPhone())
+                .collect(Collectors.toList());
+/**
+ * Add Medical and allergy for each person
+ */
+        return residents;
     }
 
 }

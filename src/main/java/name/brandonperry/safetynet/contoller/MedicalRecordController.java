@@ -27,7 +27,7 @@ public class MedicalRecordController {
      */
     @GetMapping("/medicalRecord")
     public List<MedicalRecord> getRecords() {
-        logger.error("Error please check controller");
+        logger.error("Error please check controllers");
         return dataFile.getRecords();
     }
 
@@ -35,18 +35,21 @@ public class MedicalRecordController {
     public MedicalRecord addMedicalRecords(@RequestBody MedicalRecord medicalRecord) {
         List<MedicalRecord> medicalRecords = dataFile.getRecords();
         medicalRecords.add(medicalRecord);
+        logger.info("Successfully added the following- ", medicalRecords.get(medicalRecords.size() - 1));
         return medicalRecords.get(medicalRecords.size() - 1);
     }
 
     @PutMapping("/medicalRecord/{id}")
     public MedicalRecord updateMedicalRecords(@PathVariable("id") String id, @RequestBody MedicalRecord medicalRecord) {
         MedicalRecord foundMedicalRecord = dataFile.updateMedicalRecord(id, medicalRecord);
+        logger.info("Successfully located ", foundMedicalRecord , "records");
         return foundMedicalRecord;
     }
 
     @DeleteMapping("/medicalRecord/{id}")
     public MedicalRecord deleteMedicalRecord(@PathVariable("id") String id) {
         MedicalRecord removedMedicalRecord = dataFile.deleteMedicalRecord(id);
+        logger.info("Successfully removed ", removedMedicalRecord , "records");
         return removedMedicalRecord;
     }
 }

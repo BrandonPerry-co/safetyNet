@@ -35,18 +35,21 @@ public class PersonController {
     public Person addPerson(@RequestBody Person person) {
         List<Person> people = dataFile.getPeople();
         people.add(person);
+        logger.info("Successfully added ", people.get(people.size() - 1));
         return people.get(people.size() - 1);
     }
 
     @PutMapping("/person/{id}")
     public Person updatePerson(@PathVariable("id") String id, @RequestBody Person person) {
         Person foundPerson = dataFile.updatePerson(id, person);
+        logger.info("Successfully located ", foundPerson);
         return foundPerson;
     }
 
     @DeleteMapping("/person/{id}")
     public Person deletePerson(@PathVariable("id") String id) {
         Person removedPerson = dataFile.deletePerson(id);
+        logger.info("Successfully removed ", removedPerson, " from database");
         return removedPerson;
     }
 

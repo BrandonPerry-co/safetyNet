@@ -36,27 +36,28 @@ public class FireStationController {
     public Firestation addStation(@RequestBody Firestation firestation) {
         List<Firestation> stations = dataFile.getStation();
         stations.add(firestation);
-        logger.info("Successfully returned all FireStations.");
+        logger.info("Successfully added the following- ", stations.get(stations.size() - 1));
         return stations.get(stations.size() - 1);
     }
 
     @PutMapping("/firestation/{id}")
     public Firestation updateStation(@PathVariable("id") String id, @RequestBody Firestation firestation) {
         Firestation foundStation = dataFile.updateStation(id, firestation);
-        logger.info("Successfully returned all FireStations.");
+        logger.info("Successfully updated the following- ", foundStation);
         return foundStation;
     }
 
     @DeleteMapping("/firestation/{id}")
     public Firestation deleteStation(@PathVariable("id") String id) {
         Firestation removedStation = dataFile.deleteStation(id);
-        logger.info("Successfully returned all FireStations.");
+        logger.info("Successfully removed the following- ", removedStation);
         return removedStation;
     }
 
     @GetMapping("/firestation")
     public List<String> getServicedArea(@RequestParam("stationNumber") String stationNumber) {
         List<String> servicedArea = dataFile.getServicedArea(stationNumber);
+        logger.info("All residents for this area- ", servicedArea);
         return servicedArea;
     }
 }

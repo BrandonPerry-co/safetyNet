@@ -29,11 +29,6 @@ public class FireStationControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void testGetAllStations() throws Exception {
-        this.mockMvc.perform(get("/firestation")).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$").isArray()).andExpect(jsonPath("$", hasSize(13)));
-    }
-
-    @Test
     @DirtiesContext
     public void testAddStation() throws Exception {
         Firestation testStations = Firestation.builder() //

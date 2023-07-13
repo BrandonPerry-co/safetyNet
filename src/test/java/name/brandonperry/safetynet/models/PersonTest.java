@@ -43,6 +43,13 @@ public class PersonTest {
         person.setPhone("281-330-8004");
         assertThat(person.getPhone()).isEqualTo("281-330-8004");
     }
+
+    @Test
+    public void testEmail() {
+        Person person = new Person();
+        person.setEmail("pie@gmail.net");
+        assertThat(person.getEmail()).isEqualTo("pie@gmail.net");
+    }
     @Test
     public void testBuilder() {
         Person person = Person.builder().firstName("Brandon").build();

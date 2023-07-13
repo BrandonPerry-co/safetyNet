@@ -30,6 +30,13 @@ class MedicalRecordTest {
     }
 
     @Test
+    public void testAge() {
+        MedicalRecord medicalRecord = new MedicalRecord();
+        medicalRecord.setAge("38");
+        assertThat(medicalRecord.getAge()).isEqualTo("38");
+    }
+
+    @Test
     public void testMedications() {
         MedicalRecord medicalRecord = new MedicalRecord();
         medicalRecord.setMedications(Arrays.asList("Motrin", "Benadryl"));

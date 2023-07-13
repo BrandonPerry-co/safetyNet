@@ -15,9 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(FireStationController.class)
@@ -56,6 +54,7 @@ public class FireStationControllerTest {
                 .andExpect(jsonPath("$.station").value("4"));
         System.out.println(testStation);
     }
+
     @Test
     @DirtiesContext
     public void testDeleteFireStationAddressMapping() throws Exception {
@@ -65,7 +64,7 @@ public class FireStationControllerTest {
                 .findFirst()
                 .orElse(null);
 
-        mockMvc.perform(delete("/firestation/{id}","1509 Culver St+3")
+        mockMvc.perform(delete("/firestation/{id}", "1509 Culver St+3")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());

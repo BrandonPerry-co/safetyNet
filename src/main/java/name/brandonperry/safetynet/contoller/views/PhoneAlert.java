@@ -1,4 +1,4 @@
-package name.brandonperry.safetynet.models;
+package name.brandonperry.safetynet.contoller.views;
 
 import lombok.*;
 

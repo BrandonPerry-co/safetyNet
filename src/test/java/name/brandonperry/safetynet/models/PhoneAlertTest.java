@@ -1,5 +1,6 @@
 package name.brandonperry.safetynet.models;
 
+import name.brandonperry.safetynet.contoller.views.PhoneAlert;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

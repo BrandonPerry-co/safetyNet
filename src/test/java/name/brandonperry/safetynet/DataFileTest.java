@@ -1,10 +1,12 @@
 package name.brandonperry.safetynet;
 
 import lombok.extern.slf4j.Slf4j;
+import name.brandonperry.safetynet.models.MedicalRecord;
 import name.brandonperry.safetynet.models.Person;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -54,6 +56,7 @@ public class DataFileTest {
     }
 
     @Test
+    @DirtiesContext
     public void testDeletePerson() throws IOException {
         Person deletedPerson = dataFile.deletePerson("John+Boyd");
         assertThat(deletedPerson.getFirstName()).isEqualTo("John");
@@ -90,11 +93,10 @@ public class DataFileTest {
     }
 
     @Test
-    public void testGetPersonInfo() throws IOException {
-        List<String> getPersonalInfo = dataFile.getPersonInfo("John" + " " + "Boyd");
-        assertThat(getPersonalInfo).isNotNull();
-        System.out.println(getPersonalInfo);
-        log.debug(getPersonalInfo.toString());
+    public void testGetPerson() throws IOException {
+        Person getPerson = dataFile.getPerson("John", "Boyd");
+        assertThat(getPerson).isNotNull();
+        log.debug(getPerson.toString());
     }
 
     @Test
@@ -107,7 +109,7 @@ public class DataFileTest {
 
     @Test
     public void testGetServicedArea() throws IOException {
-        List<String> getServicingArea = dataFile.getServicedArea("1");
+        List<Person> getServicingArea = dataFile.getServicedArea("1");
         assertThat(getServicingArea).isNotNull();
         System.out.println(getServicingArea);
         log.debug(getServicingArea.toString());
@@ -119,5 +121,26 @@ public class DataFileTest {
         assertThat(getListOfAllStations).isNotNull();
         System.out.println(getListOfAllStations);
         log.debug(getListOfAllStations.toString());
+    }
+
+    @Test
+    public void testGetMeds() throws IOException {
+        MedicalRecord getMedical = dataFile.getMedicalRecords("John", "Boyd");
+        assertThat(getMedical).isNotNull();
+        log.debug(getMedical.toString());
+    }
+
+//    @Test
+//    public void testGetPeople() throws IOException {
+//        Person getPerson = dataFile.getPerson("John", "Boyd");
+//        assertThat(getPerson).isNotNull();
+//        log.debug(getPerson.toString());
+//    }
+
+    @Test
+    public void testGetAddress() throws IOException {
+        Person getPerson = dataFile.getAddress("1509 Culver St");
+        assertThat(getPerson).isNotNull();
+        log.debug(getPerson.toString());
     }
 }

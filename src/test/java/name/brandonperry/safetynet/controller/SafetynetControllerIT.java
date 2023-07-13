@@ -53,15 +53,16 @@ public class SafetynetControllerIT {
 
     }
 
-//        @Test
-//    public void testGetFirestationNum() throws Exception {
-//        List<Person> testGetFireAddress = dataFile.getPeople();
-//            this.mockMvc.perform(get("/fire?address={address}", "1509 Culver St"))
-//                    .andDo(print())
-//                    .andExpect(status().isOk())
-//                    .andExpect(jsonPath("$").isArray())
-//                    .andExpect(jsonPath("$lastName", hasItem("boyd")));
-//            System.out.println(testGetFireAddress);
-//    }
+    @Test
+    public void testPersonInfo() throws Exception {
+        List<Person> testPeople = dataFile.getPeople();
+        this.mockMvc.perform(get("/personInfo?firstName={firstName}&lastName={lastName}", "John", "Boyd"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email").value("jaboyd@email.com"));
+        System.out.println(testPeople);
+
+    }
+
 
 }

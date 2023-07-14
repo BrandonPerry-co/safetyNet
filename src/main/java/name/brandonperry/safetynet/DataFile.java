@@ -2,7 +2,6 @@ package name.brandonperry.safetynet;
 
 import com.jsoniter.JsonIterator;
 import com.jsoniter.any.Any;
-import name.brandonperry.safetynet.contoller.views.FloodStations;
 import name.brandonperry.safetynet.models.Firestation;
 import name.brandonperry.safetynet.models.MedicalRecord;
 import name.brandonperry.safetynet.models.Person;
@@ -286,6 +285,7 @@ public class DataFile {
                 .findFirst()
                 .orElse(null);
     }
+
     public MedicalRecord getMedicalRecords(String firstName, String lastName) {
         return medicalRecords.stream()
                 .filter(p -> p.getFirstName().equals(firstName) && p.getLastName().equals(lastName))

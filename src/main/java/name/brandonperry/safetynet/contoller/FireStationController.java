@@ -5,12 +5,16 @@ import name.brandonperry.safetynet.DataFile;
 import name.brandonperry.safetynet.contoller.views.StationInfo;
 import name.brandonperry.safetynet.contoller.views.StationPersonInfo;
 import name.brandonperry.safetynet.models.Firestation;
+import name.brandonperry.safetynet.models.MedicalRecord;
 import name.brandonperry.safetynet.models.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -63,11 +67,24 @@ public class FireStationController {
     public StationInfo getServicedArea(@RequestParam("stationNumber") String stationNumber) {
         List<Person> people = dataFile.getServicedArea(stationNumber);
         StationInfo stationInfo = new StationInfo();
+        MedicalRecord medicalRecord = dataFile.getRecords()
+                .stream()
+                .map(p -> p.getBirthdate())
+                .findAny().orElse(null)
+                .collect(Collectors.);
+        LocalDate birthDate = LocalDate.parse(medicalRecord.getBirthdate(), DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+        int age = calculateAge(birthDate);
+        String ageString = String.valueOf(age);
         List<StationPersonInfo> stationPersonInfo = new ArrayList<>();
         stationPersonInfo = people.stream()
                 .map(p -> {
                     var info = StationPersonInfo.builder()
-                            .firstName(p.getFirstName()).build();
+                            .firstName(p.getFirstName())
+                            .lastName(p.getLastName())
+                            .address(p.getAddress())
+                            .phone(p.getPhone())
+                            .age(ageString)
+                            .build();
                     //TODO calculate age and put in info
                     return info;
                 })
@@ -76,5 +93,10 @@ public class FireStationController {
         //toDo look at logic in dataFile and use it to figure out the number of adults and children
         logger.info("All residents for this area- ", people);
         return stationInfo;
+    }
+    private int calculateAge(LocalDate birthdate) {
+        LocalDate now = LocalDate.now();
+        Period period = Period.between(birthdate, now);
+        return period.getYears();
     }
 }

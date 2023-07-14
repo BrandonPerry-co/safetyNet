@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @Import(Person.class)
@@ -85,7 +83,7 @@ public class SafetynetController {
     }
 
         @GetMapping("/flood/stations")
-    public FloodStations getFloodStations(@RequestParam("stations") String stations) {
+    public FloodStationsPersonInfo getFloodStations(@RequestParam("stations") String stations) {
         Firestation firestation = dataFile.getStation()
                 .stream()
                 .filter(p-> stations.equals(p.getStation()))
@@ -96,7 +94,7 @@ public class SafetynetController {
         int age = getAge(birthDate);
         String ageString = String.valueOf(age);
         logger.info("The person found is ", person);
-        FloodStations floodStations = FloodStations.builder() //
+        FloodStationsPersonInfo floodStations = FloodStationsPersonInfo.builder() //
                 .name(person.getFirstName() + " " + person.getLastName()) //
                 .age(ageString) //
                 .medications(medicalRecord.getMedications()) //

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -67,17 +66,31 @@ public class FireStationController {
     public StationInfo getServicedArea(@RequestParam("stationNumber") String stationNumber) {
         List<Person> people = dataFile.getServicedArea(stationNumber);
         StationInfo stationInfo = new StationInfo();
-        MedicalRecord medicalRecord = dataFile.getRecords()
-                .stream()
-                .map(p -> p.getBirthdate())
-                .findAny().orElse(null)
-                .collect(Collectors.);
-        LocalDate birthDate = LocalDate.parse(medicalRecord.getBirthdate(), DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-        int age = calculateAge(birthDate);
-        String ageString = String.valueOf(age);
-        List<StationPersonInfo> stationPersonInfo = new ArrayList<>();
-        stationPersonInfo = people.stream()
+        List<MedicalRecord> medicalRecords = dataFile.getRecords();
+
+        final int[] adultsCount = {0};
+        final int[] childrenCount = {0};
+
+        List<StationPersonInfo> stationPersonInfo = people.stream()
                 .map(p -> {
+                    MedicalRecord medicalRecord = dataFile.getRecords()
+                            .stream()
+                            .filter(record -> record.getFirstName().equals(p.getFirstName()) && record.getLastName().equals(p.getLastName()))
+                            .findAny()
+                            .orElse(null);
+                    LocalDate birthDate = null;
+                    int age = 0;
+                    if (medicalRecord != null) {
+                        birthDate = LocalDate.parse(medicalRecord.getBirthdate(), DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+                        age = calculateAge(birthDate);
+                        if (age <= 18) {
+                            childrenCount[0]++;
+                        } else {
+                            adultsCount[0]++;
+                        }
+                    }
+                    String ageString = String.valueOf(age);
+
                     var info = StationPersonInfo.builder()
                             .firstName(p.getFirstName())
                             .lastName(p.getLastName())
@@ -85,15 +98,20 @@ public class FireStationController {
                             .phone(p.getPhone())
                             .age(ageString)
                             .build();
-                    //TODO calculate age and put in info
+
                     return info;
                 })
                 .collect(Collectors.toList());
+
         stationInfo.setStationPersonInfo(stationPersonInfo);
-        //toDo look at logic in dataFile and use it to figure out the number of adults and children
+        // ToDo: Look at logic in dataFile and use it to figure out the number of adults and children
+        stationInfo.setNumOfAdults(adultsCount[0]);
+        stationInfo.setNumOfChildren(childrenCount[0]);
+
         logger.info("All residents for this area- ", people);
         return stationInfo;
     }
+
     private int calculateAge(LocalDate birthdate) {
         LocalDate now = LocalDate.now();
         Period period = Period.between(birthdate, now);

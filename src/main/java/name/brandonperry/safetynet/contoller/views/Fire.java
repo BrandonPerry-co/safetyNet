@@ -1,4 +1,4 @@
-package name.brandonperry.safetynet.models;
+package name.brandonperry.safetynet.contoller.views;
 
 import lombok.*;
 
@@ -9,13 +9,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Generated
-public class MedicalRecord {
-
-    private String firstName;
-    private String lastName;
-    private String birthdate;
+public class Fire {
+    private String station;
+    private String name;
+    private String phone;
     private String age;
-    private String stationNumber;
     private List<String> medications;
     private List<String> allergies;
 }

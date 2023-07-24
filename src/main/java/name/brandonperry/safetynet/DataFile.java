@@ -233,11 +233,15 @@ public class DataFile {
 
         List<Person> residents = people.stream()
                 .filter(p -> area.stream().anyMatch(a -> a.equals(p.getAddress())))
-//                .map(p -> "Name: " + p.getFirstName() + " " + p.getLastName() + " " + "Address: " + p.getAddress() + " " + "Phone: " + p.getPhone())
                 .collect(Collectors.toList());
-/**
- * Add Adult and child count
- */
+
+        return residents;
+    }
+
+
+    /**
+     * Add Adult and child count
+     */
 //        List<String> numberOfAdults = medicalRecords.stream()
 //                .filter(p -> area.stream().anyMatch(a -> a.equals(p.getFirstName())))
 ////                .map(p -> p.getBirthdate())
@@ -248,9 +252,6 @@ public class DataFile {
 //                    return null;
 //                })
 //                .collect(Collectors.toList());
-
-        return residents;
-    }
 
 
     //http://localhost:8080/flood/stations?stations=<a list of station_numbers>
@@ -298,7 +299,6 @@ public class DataFile {
                 .findAny()
                 .orElse(null);
     }
-
     public MedicalRecord getPersonRecords(String firstName, String lastName) {
         return medicalRecords.stream()
                 .filter(p -> p.getFirstName().equals(firstName) && p.getLastName().equals(lastName))
@@ -318,6 +318,34 @@ public class DataFile {
                 .filter(p -> p.getFirstName().equals(firstName) && p.getLastName().equals(lastName))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public List<Person> getFireAddress(String address) {
+        List<String> fireAddress = people.stream()
+                .filter(p -> address.equals(p.getAddress()))
+                .map(p -> p.getAddress())
+                .collect(Collectors.toList());
+
+        List<Person> res = people.stream()
+                .filter(p -> fireAddress.stream().anyMatch(a -> a.equals(p.getAddress())))
+                .collect(Collectors.toList());
+
+        return res;
+    }
+
+    public String getFireStationNumber(String address) {
+        List<String> stationNumbers = stations.stream()
+                .filter(firestation -> address.equals(firestation.getAddress()))
+                .map(p-> p.getStation())
+                .collect(Collectors.toList());
+
+        // Assuming each address is served by only one fire station
+        if (!stationNumbers.isEmpty()) {
+            return stationNumbers.get(0);
+        }
+
+        // Return null or a default value if address is not found in the firestations data
+        return null;
     }
 
 

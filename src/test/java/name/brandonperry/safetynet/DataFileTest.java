@@ -11,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -130,12 +131,6 @@ public class DataFileTest {
         log.debug(getMedical.toString());
     }
 
-//    @Test
-//    public void testGetPeople() throws IOException {
-//        Person getPerson = dataFile.getPerson("John", "Boyd");
-//        assertThat(getPerson).isNotNull();
-//        log.debug(getPerson.toString());
-//    }
 
     @Test
     public void testGetAddress() throws IOException {
@@ -143,4 +138,19 @@ public class DataFileTest {
         assertThat(getPerson).isNotNull();
         log.debug(getPerson.toString());
     }
+
+    @Test
+    public void testGetFireAddress() throws IOException {
+        List<Person> allPeopleList = dataFile.getFireAddress("1509 Culver St");
+        assertThat(allPeopleList).isNotNull();
+        log.debug(allPeopleList.toString());
+    }
+
+
+//    public void testGetServicedArea() throws IOException {
+//        List<Person> getServicingArea = dataFile.getServicedArea("1");
+//        assertThat(getServicingArea).isNotNull();
+//        System.out.println(getServicingArea);
+//        log.debug(getServicingArea.toString());
+//    }
 }

@@ -27,20 +27,6 @@ public class SafetynetControllerIT {
     @Autowired
     private MockMvc mockMvc;
 
-//    @Test
-//    public void testFireStationNumber() throws Exception {
-//        List<Firestation> testGetFireStations = dataFile.getStation();
-//        Firestation fireNum = testGetFireStations.stream()
-//                .filter(p -> "3".equals(p.getStation()))
-//                .findAny().orElse(null);
-//        String testStationJson = new ObjectMapper().writeValueAsString(fireNum);
-//        mockMvc.perform(get("/firestation?stationNumber={id}", "3")
-//                        .content(testStationJson)
-//                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                        .accept(MediaType.APPLICATION_JSON_VALUE)).andExpect(status().isOk());
-//        System.out.println(fireNum);
-//    }
-
     @Test
     public void testCommunityEmail() throws Exception {
         List<Person> testPeople = dataFile.getPeople();
@@ -63,6 +49,4 @@ public class SafetynetControllerIT {
         System.out.println(testPeople);
 
     }
-
-
 }

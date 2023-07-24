@@ -15,7 +15,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(FireStationController.class)
@@ -76,6 +78,16 @@ public class FireStationControllerTest {
         assertThat(updatedStation).doesNotContain(testRemovedStation);
 
         System.out.println(updatedStation);
+    }
+
+    @Test
+    public void testGetServicedArea() throws Exception {
+        this.mockMvc.perform(get("/firestations?stationNumber={stationNumber}", "1"))
+                .andDo(print()).andExpect(status().isOk())
+                .andExpect(jsonPath("$.stationPersonInfo").isArray())
+                .andExpect(jsonPath("$.stationPersonInfo", hasSize(6)))
+                .andExpect(jsonPath("$.numOfAdults").value(5))
+                .andExpect(jsonPath("$.numOfChildren").value(1));
     }
 
 }

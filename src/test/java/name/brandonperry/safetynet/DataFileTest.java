@@ -1,6 +1,7 @@
 package name.brandonperry.safetynet;
 
 import lombok.extern.slf4j.Slf4j;
+import name.brandonperry.safetynet.models.Firestation;
 import name.brandonperry.safetynet.models.MedicalRecord;
 import name.brandonperry.safetynet.models.Person;
 import org.junit.jupiter.api.Test;
@@ -11,7 +12,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,6 +38,12 @@ public class DataFileTest {
 
     @Test
     public void testLoadStations() throws IOException {
+        assertThat(dataFile.getStation().size()).isEqualTo(13);
+        System.out.println(dataFile.getStation());
+    }
+
+    @Test
+    public void testGetStations() throws IOException {
         assertThat(dataFile.getStation().size()).isEqualTo(13);
         System.out.println(dataFile.getStation());
     }
@@ -146,11 +152,19 @@ public class DataFileTest {
         log.debug(allPeopleList.toString());
     }
 
+    @Test
+    public void testGetFireStationNumber1() throws IOException {
+        Firestation station = new Firestation();
+        station.setAddress("1509 Culver St");
+        station.setStation("3");
+        dataFile.getStation().add(station);
 
-//    public void testGetServicedArea() throws IOException {
-//        List<Person> getServicingArea = dataFile.getServicedArea("1");
-//        assertThat(getServicingArea).isNotNull();
-//        System.out.println(getServicingArea);
-//        log.debug(getServicingArea.toString());
-//    }
+        String fireStationNumber = dataFile.getFireStationNumber("1509 Culver St");
+        assertThat(fireStationNumber).isEqualTo("3");
+
+        fireStationNumber = dataFile.getFireStationNumber("4422 N Step St");
+        assertThat(fireStationNumber).isNull();
+    }
+
+
 }

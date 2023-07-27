@@ -16,10 +16,12 @@ import java.util.List;
 public class PersonController {
     private DataFile dataFile;
     Logger logger = LoggerFactory.getLogger(PersonController.class);
+
     @Autowired
     public PersonController(DataFile dataFile) {
-        this.dataFile= dataFile;
+        this.dataFile = dataFile;
     }
+
     /**
      * Get all people
      *

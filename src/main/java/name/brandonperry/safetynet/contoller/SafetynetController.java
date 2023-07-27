@@ -104,6 +104,7 @@ public class SafetynetController {
 
         return childAlertList;
     }
+
     private LocalDate getBirthdateForPerson(Person person, DataFile dataFile) {
         MedicalRecord medicalRecord = dataFile.getRecords().stream()
                 .filter(record -> record.getFirstName().equalsIgnoreCase(person.getFirstName())
@@ -123,34 +124,34 @@ public class SafetynetController {
     }
 
 
-@GetMapping("/fire")
-public List<Fire> getFireStationAndPeople(@RequestParam("address") String address) {
-    List<Fire> fireList = new ArrayList<>();
-    List<Person> personList = dataFile.getFireAddress(address);
+    @GetMapping("/fire")
+    public List<Fire> getFireStationAndPeople(@RequestParam("address") String address) {
+        List<Fire> fireList = new ArrayList<>();
+        List<Person> personList = dataFile.getFireAddress(address);
 
-    // Get the fire station number that services the provided address
-    String stationNumber = getFireStationNumber(address);
+        // Get the fire station number that services the provided address
+        String stationNumber = getFireStationNumber(address);
 
-    for (Person person : personList) {
-        MedicalRecord medicalRecord = dataFile.getPersonRecords(person.getFirstName(), person.getLastName());
-        LocalDate birthDate = LocalDate.parse(medicalRecord.getBirthdate(), DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-        int age = fireAge(birthDate);
-        String ageString = String.valueOf(age);
+        for (Person person : personList) {
+            MedicalRecord medicalRecord = dataFile.getPersonRecords(person.getFirstName(), person.getLastName());
+            LocalDate birthDate = LocalDate.parse(medicalRecord.getBirthdate(), DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+            int age = fireAge(birthDate);
+            String ageString = String.valueOf(age);
 
-        Fire fire = Fire.builder()
-                .station(stationNumber)
-                .name(person.getFirstName() + " " + person.getLastName())
-                .phone(person.getPhone())
-                .age(ageString)
-                .medications(medicalRecord.getMedications())
-                .allergies(medicalRecord.getAllergies())
-                .build();
+            Fire fire = Fire.builder()
+                    .station(stationNumber)
+                    .name(person.getFirstName() + " " + person.getLastName())
+                    .phone(person.getPhone())
+                    .age(ageString)
+                    .medications(medicalRecord.getMedications())
+                    .allergies(medicalRecord.getAllergies())
+                    .build();
 
-        fireList.add(fire);
+            fireList.add(fire);
+        }
+
+        return fireList;
     }
-
-    return fireList;
-}
 
     private String getFireStationNumber(String address) {
         return dataFile.getFireStationNumber(address);
@@ -161,18 +162,18 @@ public List<Fire> getFireStationAndPeople(@RequestParam("address") String addres
         return Period.between(birthDate, currentDate).getYears();
     }
 
-   @GetMapping("/flood/stations")
-public ResponseEntity<List<FloodStationsPersonInfo>> getFloodStationsInfo(@RequestParam("stations") List<String> stationNumbers) {
-    List<FloodStationsPersonInfo> result = stationNumbers.stream()
-            .flatMap(stationNumber -> dataFile.getServicedArea(stationNumber).stream())
-            .collect(Collectors.groupingBy(Person::getAddress))
-            .values()
-            .stream()
-            .map(this::createFloodStationsPersonInfo)
-            .collect(Collectors.toList());
+    @GetMapping("/flood/stations")
+    public ResponseEntity<List<FloodStationsPersonInfo>> getFloodStationsInfo(@RequestParam("stations") List<String> stationNumbers) {
+        List<FloodStationsPersonInfo> result = stationNumbers.stream()
+                .flatMap(stationNumber -> dataFile.getServicedArea(stationNumber).stream())
+                .collect(Collectors.groupingBy(Person::getAddress))
+                .values()
+                .stream()
+                .map(this::createFloodStationsPersonInfo)
+                .collect(Collectors.toList());
 
-    return ResponseEntity.ok(result);
-}
+        return ResponseEntity.ok(result);
+    }
 
     private FloodStationsPersonInfo createFloodStationsPersonInfo(List<Person> people) {
         if (people.isEmpty()) {
@@ -199,6 +200,7 @@ public ResponseEntity<List<FloodStationsPersonInfo>> getFloodStationsInfo(@Reque
                 .allergies(medicalRecord.getAllergies())
                 .build();
     }
+
     private int getResAge(LocalDate birthdate) {
         LocalDate now = LocalDate.now();
         Period period = Period.between(birthdate, now);

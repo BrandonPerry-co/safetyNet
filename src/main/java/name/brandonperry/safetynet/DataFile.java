@@ -33,6 +33,7 @@ public class DataFile {
         try {
             load();
         } catch (IOException e) {
+            logger.error("Error occurred parsing datafile: {}", e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -218,9 +219,6 @@ public class DataFile {
                 .filter(p -> peopleByAddress.stream().anyMatch(a -> a.equals(p.getFirstName() + " " + p.getLastName())))
                 .map(p -> "Name: " + p.getFirstName() + " " + p.getLastName() + " " + "DOB: " + p.getBirthdate() + " " + "Medications: " + p.getMedications() + " " + "Allergies: " + p.getAllergies())
                 .collect(Collectors.toList());
-/**
- * Add phoneNumber that's the only thing missing
- */
         return getMedicalInfo;
     }
 
@@ -237,21 +235,6 @@ public class DataFile {
 
         return residents;
     }
-
-
-    /**
-     * Add Adult and child count
-     */
-//        List<String> numberOfAdults = medicalRecords.stream()
-//                .filter(p -> area.stream().anyMatch(a -> a.equals(p.getFirstName())))
-////                .map(p -> p.getBirthdate())
-//                .map(p -> {
-//                    LocalDate birthdate = LocalDate.parse(p.getBirthdate(), DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-//                    int age = calculateAge(birthdate);
-//                    if (age < 18) return age + " Adults";
-//                    return null;
-//                })
-//                .collect(Collectors.toList());
 
 
     //http://localhost:8080/flood/stations?stations=<a list of station_numbers>
@@ -293,12 +276,14 @@ public class DataFile {
                 .findFirst()
                 .orElse(null);
     }
+
     public Person getAddress(String address) {
         return people.stream()
                 .filter(p -> p.getAddress().equals(address))
                 .findAny()
                 .orElse(null);
     }
+
     public MedicalRecord getPersonRecords(String firstName, String lastName) {
         return medicalRecords.stream()
                 .filter(p -> p.getFirstName().equals(firstName) && p.getLastName().equals(lastName))
@@ -336,7 +321,7 @@ public class DataFile {
     public String getFireStationNumber(String address) {
         List<String> stationNumbers = stations.stream()
                 .filter(firestation -> address.equals(firestation.getAddress()))
-                .map(p-> p.getStation())
+                .map(p -> p.getStation())
                 .collect(Collectors.toList());
 
         // Assuming each address is served by only one fire station

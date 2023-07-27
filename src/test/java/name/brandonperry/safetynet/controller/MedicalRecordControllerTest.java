@@ -41,7 +41,7 @@ public class MedicalRecordControllerTest {
     @Test
     public void testAddMedicalRecord() throws Exception {
         MedicalRecord testMedicalRecords = MedicalRecord.builder() //
-                .firstName("John").lastName("Doe").birthdate("11/30/1980").medications(Arrays.asList("Omega3")).allergies(Arrays.asList("veggies")).build();
+                .firstName("John").lastName("Boyd").birthdate("11/30/1980").medications(Arrays.asList("Omega3")).allergies(Arrays.asList("veggies")).build();
         String testMedicalRecordJson = new ObjectMapper().writeValueAsString(testMedicalRecords);
         mockMvc.perform(post("/medicalRecord")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -83,9 +83,7 @@ public class MedicalRecordControllerTest {
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
 
-        // Get the updated list of records
         List<MedicalRecord> updatedMedicalRecords = dataFile.getRecords();
-        // Assertions to verify the deletion
         assertThat(updatedMedicalRecords).doesNotContain(test);
         System.out.println(updatedMedicalRecords);
 

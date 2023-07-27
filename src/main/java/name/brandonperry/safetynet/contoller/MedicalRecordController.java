@@ -42,14 +42,14 @@ public class MedicalRecordController {
     @PutMapping("/medicalRecord/{id}")
     public MedicalRecord updateMedicalRecords(@PathVariable("id") String id, @RequestBody MedicalRecord medicalRecord) {
         MedicalRecord foundMedicalRecord = dataFile.updateMedicalRecord(id, medicalRecord);
-        logger.info("Successfully located ", foundMedicalRecord , "records");
+        logger.info("Successfully located ", foundMedicalRecord, "records");
         return foundMedicalRecord;
     }
 
     @DeleteMapping("/medicalRecord/{id}")
     public MedicalRecord deleteMedicalRecord(@PathVariable("id") String id) {
         MedicalRecord removedMedicalRecord = dataFile.deleteMedicalRecord(id);
-        logger.info("Successfully removed ", removedMedicalRecord , "records");
+        logger.info("Successfully removed ", removedMedicalRecord, "records");
         return removedMedicalRecord;
     }
 }
